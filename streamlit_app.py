@@ -49,10 +49,7 @@ def fetch_weather_data():
 with st.spinner('最新の気温データを取得中...'):
     if "df" not in st.session_state:
         st.session_state.df = fetch_weather_data()
-    
-    st.session_state.df = st.data_editor(st.session_state.df)
-    df = st.session_state.df
-
+df = st.session_state.df
 
 # 気温を高さ（メートル）に変換（例：1度 = 3000m）
 df['elevation'] = df['Temperature'] * 3000
@@ -62,7 +59,10 @@ col1, col2 = st.columns([1, 2])
 
 with col1:
     st.subheader("取得したデータ")
-    st.dataframe(df[['City', 'Temperature']], use_container_width=True)
+    edited = st.data_editor(df[['City', 'Temperature']],use_container_width=True)
+    df['Temperature'] = edited['Temperature']
+    df['elevation'] = df['Temperature'] * 3000
+    # st.dataframe(df[['City', 'Temperature']], use_container_width=True)
     
     if st.button('データを更新'):
         st.cache_data.clear()
