@@ -47,7 +47,12 @@ def fetch_weather_data():
 
 # データの取得
 with st.spinner('最新の気温データを取得中...'):
-    df = fetch_weather_data()
+    if "df" not in st.session_state:
+        st.session_state.df = fetch_weather_data()
+    
+    st.session_state.df = st.data_editor(st.session_state.df)
+    df = st.session_state.df
+
 
 # 気温を高さ（メートル）に変換（例：1度 = 3000m）
 df['elevation'] = df['Temperature'] * 3000
